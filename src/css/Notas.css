@@ -1,0 +1,11 @@
+.tarjeta {
+    margin: 3%;
+    height: 237px;
+}
+
+.texto {
+    width: 862px !important;
+    height: 90px !important;
+    max-height: 90px !important;
+    min-height: 90px !important;
+}
