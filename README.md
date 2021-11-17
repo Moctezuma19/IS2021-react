@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Servidor backend de la aplicación
+
+[Servicio REST](https://github.com/Moctezuma19/IS2021-rest)
+
 ## Available Scripts
 
 In the project directory, you can run:
