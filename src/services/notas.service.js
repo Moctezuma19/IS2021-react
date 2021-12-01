@@ -1,13 +1,13 @@
-import axios from "axios";
-import baseUrl from "../util/Constants";
+import {ApiProtected as http} from "../config/axios";
+import {baseUrl} from "../util/Constants";
 
 class NotasServicio {
     agrega(datos) {
-        return axios.put(baseUrl + "/agrega", datos);
+        return http.put(baseUrl + "/nota/agrega", datos);
     }
 
     obtenNotas() {
-        return axios.post(baseUrl + "/todas");
+        return http.post(baseUrl + "/nota/todas");
     }
 
 }

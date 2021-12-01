@@ -3,9 +3,11 @@ import Tarjeta from "../component/Tarjeta";
 import {Grid} from '@mui/material';
 import NotasServicio from "../services/notas.service";
 import {useHistory} from 'react-router-dom';
+import {useAuthContext} from "../context/AuthenticationContext";
 
 const InicioPage = () => {
     const history = useHistory();
+    const {user, logout} = useAuthContext()
     const [textos, setTextos] = React.useState([]);
     const notasServicio = React.useMemo(() => new NotasServicio(), []);
 
@@ -21,7 +23,7 @@ const InicioPage = () => {
             console.log("error: " + error);
         });
     }
-
+    console.log(user);
     React.useEffect(() => {
         notasServicio.obtenNotas().then(({data: response}) => {
             let arr = response.data.map(x => (x.nota));
@@ -36,8 +38,9 @@ const InicioPage = () => {
         <Grid item lg={6}>
             <Tarjeta handleClick={handleClick}/>
             <a onClick={(e) => {
-                history.push("/bienvenido");
-            }}>Ir a la bienvenida </a>
+                logout();
+                history.push("/");
+            }} style={{fontWeight: "bold", color: "green", cursor: "pointer"}}>Salir </a>
         </Grid>
         <Grid item lg={6}>
             {textos.length > 0 ?

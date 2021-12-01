@@ -1,61 +1,73 @@
-import React from 'react';
-import {Button, Card, CardContent, CardHeader, Alert, FormGroup, Grid, TextField} from "@mui/material";
-import {useAuthContext} from "../context/AuthenticationContext";
+import React from "react";
+import {Alert, Button, Card, CardContent, CardHeader, FormGroup, Grid, TextField} from "@mui/material";
 //@ts-ignore
 import {useHistory} from 'react-router-dom';
+import UsuarioServicio from "../services/usuario.service";
 
-const BienvenidoPage = () => {
-    const {loginUser} = useAuthContext();
+const RegistroPage = () => {
+
     const history = useHistory();
     const [nombre, setNombre] = React.useState("");
     const [clave, setClave] = React.useState("");
     const [show, setShow] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         setShow(false);
-        let response = null;
-        try {
-            response = await loginUser({nombre: nombre, clave: clave});
-        } catch (error) {
+        usuarioServicio.creaUsuario({nombre: nombre, clave: clave}).then((response: any) => {
+            let {data} = response;
+            if (data === null) {
+                setSuccess(false);
+            } else {
+                setSuccess(true);
+            }
 
-        }
-        if (response == null) {
             setShow(true);
-        } else {
-            history.push("/principal");
-        }
+
+        }).catch((error: any) => {
+            console.log("error: " + error);
+            setSuccess(false);
+            setShow(true);
+        });
+
     }
     return (<Grid container>
         <Grid item lg={4}>
         </Grid>
         <Grid item lg={4}>
-            {show &&
+            {show && !success &&
             <Alert severity="warning" onClose={() => {
                 setShow(false);
-            }}>Usuario o contraseña incorrecto</Alert>
+            }}>Usuario o contraseña ya existentes</Alert>
+            }
+            {show && success &&
+            <Alert severity={"success"} onClose={() => {
+                setShow(false);
+            }}>¡El usuario se agrego con éxito!</Alert>
             }
             <Card>
-                <CardHeader title="Bienvenido"/>
+                <CardHeader title="Registro"/>
                 <CardContent>
                     <form onSubmit={handleSubmit}>
                         <FormGroup>
                             <TextField label="Usuario" variant="outlined" name="nombre" value={nombre}
                                        onChange={(e: any) => {
                                            setNombre(e.target.value);
-                                       }}/>
+                                       }} required/>
                             <div style={{margin: 5}}></div>
                             <TextField label="Contraseña" variant="outlined" name="clave" value={clave}
                                        onChange={(e: any) => {
                                            setClave(e.target.value);
-                                       }} type="password"/>
+                                       }} type="password" required/>
                         </FormGroup>
                         <br/>
                         <div>
-                            <Button type="submit" variant="contained" color="success">Iniciar sesión</Button>
+                            <Button type="submit" variant="contained" color="success">Registrarse</Button>
                             <a style={{float: "right", cursor: "pointer"}} onClick={(e: any) => {
-                                history.push("/registro")
-                            }}><b style={{color: "green"}}>Ir a registrarse</b></a>
+                                history.push("/");
+                            }}><b style={{color: "green"}}>Ir al inicio de sesión</b></a>
                         </div>
                     </form>
                 </CardContent>
@@ -64,8 +76,8 @@ const BienvenidoPage = () => {
         <Grid item lg={4}>
         </Grid>
 
-    </Grid>)
+    </Grid>);
 
-}
+};
 
-export default BienvenidoPage;
+export default RegistroPage;
