@@ -72,7 +72,7 @@ const AuthProvider = ({children}) => {
 
                 localStorage.setItem(USER_INFO, JSON.stringify(data));
                 localStorage.setItem(USER_TOKEN, data.token);
-                dispatch({error: null, type: 'LOGIN_SUCCESS', payload: data});
+                dispatch({error: null, type: 'LOGIN_SUCCESS', payload: {user: data}});
                 return data;
             } else {
                 console.log("error");

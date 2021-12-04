@@ -24,6 +24,7 @@ const BienvenidoPage = () => {
             setShow(true);
         } else {
             history.push("/principal");
+            return;
         }
     }
     return (<Grid container>
